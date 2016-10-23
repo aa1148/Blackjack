@@ -36,16 +36,13 @@ public class Game {
 		
 		// Draw 4 initial cards. 2 for player and 2 for dealer.
 		// The first 3 will change to face up state
-//		for (int i=0; i < 3; i++) {
-//			Card cardToGive = deck.drawCard();
-//			cardToGive.setState(true); // change to face up state
-//			drawnCards.add(cardToGive);
-//		}
-		drawnCards.add(new Card(1, true));
-		drawnCards.add(new Card(2, true));
-		drawnCards.add(new Card(10, true));
-		drawnCards.add(new Card(2, false));
-//		drawnCards.add(deck.drawCard());
+		for (int i=0; i < 3; i++) {
+			Card cardToGive = deck.drawCard();
+			cardToGive.setState(true); // change to face up state
+			drawnCards.add(cardToGive);
+		}
+		
+		drawnCards.add(deck.drawCard());
 		
 		// give 2 cards to player, both face up
 		giveCards(true, 2);
@@ -132,7 +129,6 @@ public class Game {
 				default:
 					System.out.println("Invalid choice! Enter a different one.");
 					sleep(500);
-					// default
 					break;
 			}
 		}
@@ -174,7 +170,9 @@ public class Game {
 					System.out.println("His total is now " + dealer.getHand().getAccumulated() + ".");
 					sleep(1500);
 				} else {
-					System.out.println("The dealer busted!\nYou have won!");
+					System.out.println("The dealer busted!");
+					sleep(500);
+					System.out.println("You have won!");
 					sleep(1000);
 					score.addOneToScore();
 					return;
@@ -241,10 +239,6 @@ public class Game {
 		this.score.setScoreValue(0);
 	}
 	
-//	public void drawCard() {
-//		drawnCards.add(deck.drawCard());
-//	}
-	
 	// Give a card either to a player or to a dealer.
 	// if toPlayer == true, to player
 	// if toPlayer == false, to dealer
@@ -253,16 +247,32 @@ public class Game {
 			// Give out the first card found in drawnCards. Works first-in-first-out
 			if (toPlayer) {
 				for (int i=0; i < numberOfCards; i++) {
-					System.out.println("Giving card to player.");
+					Card drawnCard = drawnCards.get(0);
+					System.out.print("Giving face-" + (drawnCard.getState() ? "up" : "down") + " card to player.");
+					
+					if (drawnCard.getState() == true) { // if it is face-up, state its value
+						System.out.println(" It is a " + drawnCard.getValue() + ".");
+					} else {
+						System.out.println();
+					}
+					
 					sleep(500);
-					player.receiveCard(drawnCards.get(0));
+					player.receiveCard(drawnCard);
 					drawnCards.remove(0);
 				}
 			} else {
 				for (int i=0; i < numberOfCards; i++) {
-					System.out.println("Giving card to dealer.");
+					Card drawnCard = drawnCards.get(0);
+					System.out.print("Giving face-" + (drawnCard.getState() ? "up" : "down") + " card to dealer.");
+					
+					if (drawnCard.getState() == true) { // if it is face-up, state its value
+						System.out.println(" It is a " + drawnCard.getValue() + ".");
+					} else {
+						System.out.println();
+					}
+					
 					sleep(500);
-					dealer.receiveCard(drawnCards.get(0));
+					dealer.receiveCard(drawnCard);
 					drawnCards.remove(0);
 				}
 			}
